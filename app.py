@@ -77,19 +77,8 @@ def get_all_users(current_user):
     # querying the database
     # for all the entries in it
     users = User.query.all()
-    # converting the query objects
-    # to list of jsons
-    output = []
-    for user in users:
-        # appending the user data json
-        # to the response list
-        output.append({
-            'public_id': user.public_id,
-            'name': user.name,
-            'email': user.email
-        })
-
-    return jsonify({'users': users_schema.dump(users)})
+    marshmallow_serial_data = users_schema.dump(users)
+    return jsonify({'users': marshmallow_serial_data})
 
 
 # route for loging user in
