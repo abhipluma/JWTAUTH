@@ -21,6 +21,15 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # creates SQLALCHEMY object
 db = SQLAlchemy(app)
 
+from flask_marshmallow import Marshmallow
+ma = Marshmallow(app)
+
+class UserSchema(ma.Schema):
+    class Meta:
+        fields = ('email','name')
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
 
 # Database ORMs
 class User(db.Model):
@@ -80,7 +89,7 @@ def get_all_users(current_user):
             'email': user.email
         })
 
-    return jsonify({'users': output})
+    return jsonify({'users': users_schema.dump(users)})
 
 
 # route for loging user in
